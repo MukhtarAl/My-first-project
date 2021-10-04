@@ -12,32 +12,58 @@ WIN.fill(BLUE)
 
 pygame.display.update()
 
+def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition):
+    WIN.fill(BLUE)
+    WIN.blit(Paddle,PaddlePosition)
+
+
+
 def KEYCHECK(KEYS):
+    if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT]:
+        return(0.2,0)
+    if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT] + KEYS[pygame.K_w] or KEYS[pygame.K_UP]:
+        return(-0.2,-0.2)
+
+    if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT] + KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:
+        return(0.2,0.2)
+    if KEYS[pygame.K_a] or KEYS[pygame.K_LEFT]:
+        return(-0.2,0)
+    if KEYS[pygame.K_a] or KEYS[pygame.K_LEFT] + KEYS[pygame.K_w] or KEYS[pygame.K_UP]:
+        return(0.2,-0.2)
+
+    if KEYS[pygame.K_a] or KEYS[pygame.K_LEFT] + KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:
+        return(-0.2,0.2)
     if KEYS[pygame.K_w] or KEYS[pygame.K_UP]:
-        return(0,10)
+        return(0,-0.2)
+    if KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:
+        return(0,0.2)
+
     else:
         return(0,0)
 
 
 def main():
-    PingPongTable = pygame.image.load("Mukhtars project ping pong table.jpg")
-    PingPongTable = pygame.transform.scale(PingPongTable,(500,250))
+    PingPongTable = pygame.image.load("PingPongTable.jpg")
+    PingPongTable = pygame.transform.scale(PingPongTable, (500,250))
     WIN.blit(PingPongTable,(325,200))
     frames  = pygame.time.Clock()
 
-    PingPongBall = pygame.image.load("Ping Pong ball.png")
+    PingPongBall = pygame.image.load("PingPongBall.png")
     PingPongBall = pygame.transform.scale(PingPongBall, (30,30))
     WIN.blit(PingPongBall, (560,310))
 
+    PaddlePosition = (300,310)
     Paddle = pygame.image.load("Paddle.png")
     Paddle = pygame.transform.scale(Paddle, (50,50))
-    WIN.blit(Paddle, (300,310))
+    WIN.blit(Paddle, PaddlePosition)
     running = True
     while running:
         KEYS = pygame.key.get_pressed()
         XCHANGE = 0
         YCHANGE = 0
         XCHANGE,YCHANGE = KEYCHECK(KEYS)
+        PaddlePosition = (PaddlePosition[0]+ XCHANGE,PaddlePosition[1]+ YCHANGE )
+        UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition)
         print(KEYCHECK(KEYS))
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
@@ -48,9 +74,5 @@ def main():
 
     pygame.quit()
 
-
-
-
 if __name__ == "__main__":
     main()
-
