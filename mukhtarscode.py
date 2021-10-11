@@ -20,22 +20,29 @@ def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition):
 
 def KEYCHECK(KEYS):
     if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT]:
-        return(0.2,0)
-    if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT] + KEYS[pygame.K_w] or KEYS[pygame.K_UP]:
-        return(-0.2,-0.2)
+        return(0.2,0)#right working
 
-    if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT] + KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:
-        return(0.2,0.2)
-    if KEYS[pygame.K_a] or KEYS[pygame.K_LEFT]:
+    elif KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT] or (KEYS[pygame.K_w] or KEYS[pygame.K_UP]):
+       return(0.2,-0.2)
+
+
+    #elif KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT] + (KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]):
+        #return(0.2,0.2)
+
+    elif KEYS[pygame.K_a] or KEYS[pygame.K_LEFT]:
         return(-0.2,0)
-    if KEYS[pygame.K_a] or KEYS[pygame.K_LEFT] + KEYS[pygame.K_w] or KEYS[pygame.K_UP]:
-        return(0.2,-0.2)
 
-    if KEYS[pygame.K_a] or KEYS[pygame.K_LEFT] + KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:
-        return(-0.2,0.2)
-    if KEYS[pygame.K_w] or KEYS[pygame.K_UP]:
-        return(0,-0.2)
-    if KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:
+    #elif KEYS[pygame.K_a] or KEYS[pygame.K_LEFT] + (KEYS[pygame.K_w] or KEYS[pygame.K_UP]):
+        #return(0.2,-0.2)
+
+
+    #elif KEYS[pygame.K_a] or KEYS[pygame.K_LEFT] + (KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]):
+        #return(-0.2,0.2)
+
+    elif KEYS[pygamwwe.K_w] or KEYS[pygame.K_UP]:#up working
+       return(0,-0.2)
+
+    elif KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:#down working
         return(0,0.2)
 
     else:
