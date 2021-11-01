@@ -67,7 +67,7 @@ def main():
     PingPongBall = pygame.transform.scale(PingPongBall, (30,30))
     WIN.blit(PingPongBall, (560,310))
 
-    PaddlePosition = (300,310)
+    PaddlePosition = (150,310)
     Paddle = pygame.image.load("Paddle.png")
     Paddle = pygame.transform.scale(Paddle, (50,50))
     WIN.blit(Paddle, PaddlePosition)
@@ -77,11 +77,15 @@ def main():
         XCHANGE = 0
         YCHANGE = 0
         XCHANGE,YCHANGE = KEYCHECK(KEYS)
-        XCHANGE = XCHANGE * 3
-        YCHANGE = YCHANGE * 3
+        XCHANGE = XCHANGE * 10
+        YCHANGE = YCHANGE * 10
         PaddlePosition = (PaddlePosition[0]+ XCHANGE,PaddlePosition[1]+ YCHANGE)
         if PaddlePosition[0] < -3.5999999999999486:
             PaddlePosition = (-3.5999999999999486, PaddlePosition[1])
+       #if PaddlePosition[0] < 303:
+           #PaddlePosition = (303, PaddlePosition[1])
+        #if PaddlePosition[0] <1234124:
+            #PaddlePosition = (1214112, PaddlePosition[1])
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition)
         print(PaddlePosition)
         for events in pygame.event.get():
