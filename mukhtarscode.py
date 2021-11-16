@@ -1,5 +1,5 @@
 import pygame
-
+import random
 WIN = pygame.display.set_mode((1100,650))
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -12,11 +12,12 @@ WIN.fill(BLUE)
 
 pygame.display.update()
 
-def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition):
+def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition):
     WIN.fill(BLUE)
     WIN.blit(PingPongTable, (325,200))
     WIN.blit(Paddle,PaddlePosition)
     WIN.blit(PingPongBall, PingPongBallPosition)
+    WIN.blit(Wall, WallPosition)
 
 
 
@@ -59,6 +60,11 @@ def KEYCHECK(KEYS):
         return(0,0)
 
 
+def PingPongBallMovement():
+
+
+
+
 def main():
     PingPongTable = pygame.image.load("PingPongTable.jpg")
     PingPongTable = pygame.transform.scale(PingPongTable, (500,250))
@@ -69,6 +75,7 @@ def main():
     PingPongBall = pygame.transform.scale(PingPongBall, (30,30))
     WIN.blit(PingPongBall, (560,310))
     PingPongBallPosition = (767, 310)
+    PingPongBall = (random.randint(), random.randint())
 
     PaddlePosition = (150,310)
     Paddle = pygame.image.load("Paddle.png")
@@ -76,8 +83,8 @@ def main():
     WIN.blit(Paddle, PaddlePosition)
 
     Wall = pygame.image.load("Wall.png")
-    Wall = pygame.transform.scale(Wall, (50,50))
-    WallPosition = ()
+    Wall = pygame.transform.scale(Wall, (50,250))
+    WallPosition = (775, 200)
     WIN.blit(Wall, WallPosition)
     running = True
     while running:
@@ -85,8 +92,8 @@ def main():
         XCHANGE = 0
         YCHANGE = 0
         XCHANGE,YCHANGE = KEYCHECK(KEYS)
-        XCHANGE = XCHANGE * 5
-        YCHANGE = YCHANGE * 5
+        XCHANGE = XCHANGE * 15
+        YCHANGE = YCHANGE * 15
         PaddlePosition = (PaddlePosition[0]+ XCHANGE,PaddlePosition[1]+ YCHANGE)
 
         #left barrier
@@ -100,11 +107,13 @@ def main():
         #bottom barrier
         if PaddlePosition[1] > 600:
             PaddlePosition = (PaddlePosition[0], 600)
-        UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition)
+        UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
         print(PaddlePosition)
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
+
+
         pygame.display.update()
 
 
