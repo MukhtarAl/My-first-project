@@ -60,7 +60,7 @@ def KEYCHECK(KEYS):
         return(0,0)
 
 
-def PingPongBallMovement():
+#def PingPongBallMovement():
 
 
 
@@ -75,7 +75,11 @@ def main():
     PingPongBall = pygame.transform.scale(PingPongBall, (30,30))
     WIN.blit(PingPongBall, (560,310))
     PingPongBallPosition = (767, 310)
-    PingPongBall = (random.randint(), random.randint())
+    TempRandom = random.randint(1, 2)
+    if TempRandom == 1:
+        PingPongBallDirection = 90
+    else:
+        PingPongBallDirection = 270
 
     PaddlePosition = (150,310)
     Paddle = pygame.image.load("Paddle.png")
@@ -106,7 +110,7 @@ def main():
             PaddlePosition = (PaddlePosition[0], -1)
         #bottom barrier
         if PaddlePosition[1] > 600:
-            PaddlePosition = (PaddlePosition[0], 600)
+            PaddlePosition = (PaddlePosition[0], 600)s
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
         print(PaddlePosition)
         for events in pygame.event.get():
