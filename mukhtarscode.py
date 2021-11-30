@@ -60,11 +60,25 @@ def KEYCHECK(KEYS):
         return(0,0)
 
 
-#def PingPongBallMovement():
+def PingPongBallMovement(PingPongBallDirection):
+
+    if PingPongBallDirection >= 90 and PingPongBallDirection <= 180:
+        XCHANGE = (PingPongBallDirection- 90) /90
+        YCHANGE = 1 - XCHANGE
+    if PingPongBallDirection >= 180 and PingPongBallDirection <= 270:
+        XCHANGE = (PingPongBallDirection - 180) / 180 * -1
+        YCHANGE = (1 + XCHANGE) * -1
+    if PingPongBallDirection >= 270 and PingPongBallDirection <= 360:
+        XCHANGE = (PingPongBallDirection - 270) / 270 * -1
+        YCHANGE = (1 + XCHANGE) * -1
+    if PingPongBallDirection >= 0 and PingPongBallDirection <= 90:
+        XCHANGE = PingPongBallDirection / 90
+        YCHANGE = (1 - XCHANGE) * -1
 
 
 
 
+    pygame.display.update()
 def main():
     PingPongTable = pygame.image.load("PingPongTable.jpg")
     PingPongTable = pygame.transform.scale(PingPongTable, (500,250))
@@ -110,7 +124,7 @@ def main():
             PaddlePosition = (PaddlePosition[0], -1)
         #bottom barrier
         if PaddlePosition[1] > 600:
-            PaddlePosition = (PaddlePosition[0], 600)s
+            PaddlePosition = (PaddlePosition[0], 600)
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
         print(PaddlePosition)
         for events in pygame.event.get():
