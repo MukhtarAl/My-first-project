@@ -25,10 +25,10 @@ def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosi
 def KEYCHECK(KEYS):
     #DONW
     if KEYS[pygame.K_s] or KEYS[pygame.K_DOWN]:
-        if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT]:
-            return (0.2, 0.2)
         if KEYS[pygame.K_a] or KEYS[pygame.K_LEFT]:
             return (-0.2, 0.2)
+        if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT]:
+            return (0.2, 0.2)
         else:
             return(0, 0.2)
     #UP
@@ -39,6 +39,7 @@ def KEYCHECK(KEYS):
             return (-0.2, -0.2)
         else:
             return(0, -0.2)
+
     #RIGHT
     if KEYS[pygame.K_d] or KEYS[pygame.K_RIGHT]:
         if KEYS[pygame.K_w] or KEYS[pygame.K_UP]:
@@ -69,16 +70,20 @@ def PingPongBallMovement(PingPongBallDirection):
         XCHANGE = (PingPongBallDirection - 180) / 180 * -1
         YCHANGE = (1 + XCHANGE) * -1
     if PingPongBallDirection >= 270 and PingPongBallDirection <= 360:
-        XCHANGE = (PingPongBallDirection - 270) / 270 * -1
+        XCHANGE = (PingPongBallDirection) / 270 * -1
         YCHANGE = (1 + XCHANGE) * -1
     if PingPongBallDirection >= 0 and PingPongBallDirection <= 90:
         XCHANGE = PingPongBallDirection / 90
         YCHANGE = (1 - XCHANGE) * -1
 
+    return XCHANGE, YCHANGE
 
+def CollisionCheck(Position1, Position2, Size1, Size2):
+    if Position2[0] >= Position1[0] and Position2[0] <= Position1[0] + Size1[0]:
+        if Position2[1] >= Position1[1] and Position2[1] <= Position1[1] + Size1[1]:
+            return True
+    return False
 
-
-    pygame.display.update()
 def main():
     PingPongTable = pygame.image.load("PingPongTable.jpg")
     PingPongTable = pygame.transform.scale(PingPongTable, (500,250))
@@ -127,6 +132,12 @@ def main():
             PaddlePosition = (PaddlePosition[0], 600)
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
         print(PaddlePosition)
+        if CollisionCheck(PingPongBallPosition, PaddlePosition, (30,30), (50,50)):
+            PingPongBallDirection = PingPongBallDirection + 180
+            if PingPongBallDirection > 360:
+                PingPongBallDirection = PingPongBallDirection - 360
+        PingPongBallX, PingPongBallY = PingPongBallMovement(PingPongBallDirection)
+        PingPongBallPosition = PingPongBallPosition[0] + PingPongBallX, PingPongBallPosition[1] + PingPongBallY
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
