@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 WIN = pygame.display.set_mode((1100,650))
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -60,6 +61,15 @@ def KEYCHECK(KEYS):
     else:
         return(0,0)
 
+def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection):
+    X = PingPongBallPosition
+    Y = WallPosition
+    X = WallPosition[0] - PingPongBallPosition[0]
+    Y = WallPosition[1] - PingPongBallPosition[1]
+    C = math.sqrt(X ** 2 + Y ** 2)
+    Direction = math.sin(Y / C)
+
+
 
 def PingPongBallMovement(PingPongBallDirection):
 
@@ -79,7 +89,7 @@ def PingPongBallMovement(PingPongBallDirection):
     return XCHANGE, YCHANGE
 
 def CollisionCheck(Position1, Position2, Size1, Size2):
-    if Position2[0] >= Position1[0] and Position2[0] <= Position1[0] + Size1[0]:
+    if Position2[0] + Size2[0] >= Position1[0] and Position2[0] <= Position1[0]:
         if Position2[1] >= Position1[1] and Position2[1] <= Position1[1] + Size1[1]:
             return True
     return False
@@ -95,10 +105,7 @@ def main():
     WIN.blit(PingPongBall, (560,310))
     PingPongBallPosition = (767, 310)
     TempRandom = random.randint(1, 2)
-    if TempRandom == 1:
-        PingPongBallDirection = 90
-    else:
-        PingPongBallDirection = 270
+    PingPongBallDirection = 270
 
     PaddlePosition = (150,310)
     Paddle = pygame.image.load("Paddle.png")
@@ -132,7 +139,7 @@ def main():
             PaddlePosition = (PaddlePosition[0], 600)
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
         print(PaddlePosition)
-        if CollisionCheck(PingPongBallPosition, PaddlePosition, (30,30), (50,50)):
+        if CollisionCheck(PingPongBallPosition, PaddlePosition, (30,30), (50,50)) and PingPongBallDirection > 180:
             PingPongBallDirection = PingPongBallDirection + 180
             if PingPongBallDirection > 360:
                 PingPongBallDirection = PingPongBallDirection - 360
