@@ -64,11 +64,12 @@ def KEYCHECK(KEYS):
 def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection):
     X = PingPongBallPosition
     Y = WallPosition
-    X = WallPosition[0] - PingPongBallPosition[0]
-    Y = WallPosition[1] - PingPongBallPosition[1]
+    X = abs(WallPosition[0] - PingPongBallPosition[0])
+    Y = abs(WallPosition[1] - PingPongBallPosition[1])
     C = math.sqrt(X ** 2 + Y ** 2)
-    Direction = math.sin(Y / C)
-
+    Direction = math.asin(Y / C)
+    Direction = math.degrees(Direction)
+    return int(Direction)
 
 
 def PingPongBallMovement(PingPongBallDirection):
@@ -89,8 +90,8 @@ def PingPongBallMovement(PingPongBallDirection):
     return XCHANGE, YCHANGE
 
 def CollisionCheck(Position1, Position2, Size1, Size2):
-    if Position2[0] + Size2[0] >= Position1[0] and Position2[0] <= Position1[0]:
-        if Position2[1] >= Position1[1] and Position2[1] <= Position1[1] + Size1[1]:
+    if Position2[0] + Size2[0] >= Position1[0] and Position2[0] <= Position1[0] + Size1[0]:
+        if Position2[1] <= Position1[1] + 30 and Position1[1] <= Position2[1] + Size2[1]:
             return True
     return False
 
@@ -143,6 +144,9 @@ def main():
             PingPongBallDirection = PingPongBallDirection + 180
             if PingPongBallDirection > 360:
                 PingPongBallDirection = PingPongBallDirection - 360
+        if CollisionCheck(PingPongBallPosition, WallPosition, (30, 30), (50,250)):
+            PingPongBallDirection = 270
+
         PingPongBallX, PingPongBallY = PingPongBallMovement(PingPongBallDirection)
         PingPongBallPosition = PingPongBallPosition[0] + PingPongBallX, PingPongBallPosition[1] + PingPongBallY
         for events in pygame.event.get():
