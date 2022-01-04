@@ -75,14 +75,14 @@ def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection
 def PingPongBallMovement(PingPongBallDirection):
 
     if PingPongBallDirection >= 90 and PingPongBallDirection <= 180:
-        XCHANGE = (PingPongBallDirection- 90) /90
-        YCHANGE = 1 - XCHANGE
+        YCHANGE = (PingPongBallDirection- 90) /90
+        XCHANGE = 1 - YCHANGE
     if PingPongBallDirection >= 180 and PingPongBallDirection <= 270:
-        XCHANGE = (PingPongBallDirection - 180) / 180 * -1
-        YCHANGE = (1 + XCHANGE) * -1
+        XCHANGE = (PingPongBallDirection - 180) / 90 * -1
+        YCHANGE = 1 + XCHANGE
     if PingPongBallDirection >= 270 and PingPongBallDirection <= 360:
-        XCHANGE = (PingPongBallDirection) / 270 * -1
-        YCHANGE = (1 + XCHANGE) * -1
+        YCHANGE = (PingPongBallDirection - 360) / 90
+        XCHANGE = (1 + YCHANGE)
     if PingPongBallDirection >= 0 and PingPongBallDirection <= 90:
         XCHANGE = PingPongBallDirection / 90
         YCHANGE = (1 - XCHANGE) * -1
@@ -118,6 +118,9 @@ def main():
     WallPosition = (775, 200)
     WIN.blit(Wall, WallPosition)
     running = True
+
+    SCORE = 0
+
     while running:
         KEYS = pygame.key.get_pressed()
         XCHANGE = 0
@@ -126,6 +129,7 @@ def main():
         XCHANGE = XCHANGE * 15
         YCHANGE = YCHANGE * 15
         PaddlePosition = (PaddlePosition[0]+ XCHANGE,PaddlePosition[1]+ YCHANGE)
+
 
         #left barrier
         if PaddlePosition[0] < -3.5999999999999486:
@@ -139,16 +143,18 @@ def main():
         if PaddlePosition[1] > 600:
             PaddlePosition = (PaddlePosition[0], 600)
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
-        print(PaddlePosition)
+        #print(PaddlePosition)
         if CollisionCheck(PingPongBallPosition, PaddlePosition, (30,30), (50,50)) and PingPongBallDirection > 180:
             PingPongBallDirection = PingPongBallDirection + 180
+            SCORE = SCORE + 1
+            print(SCORE)
             if PingPongBallDirection > 360:
                 PingPongBallDirection = PingPongBallDirection - 360
         if CollisionCheck(PingPongBallPosition, WallPosition, (30, 30), (50,250)):
-            PingPongBallDirection = 270
+            PingPongBallDirection = random.randint(240,320)
 
         PingPongBallX, PingPongBallY = PingPongBallMovement(PingPongBallDirection)
-        PingPongBallPosition = PingPongBallPosition[0] + PingPongBallX, PingPongBallPosition[1] + PingPongBallY
+        PingPongBallPosition = PingPongBallPosition[0] + (PingPongBallX * (SCORE + 5)), PingPongBallPosition[1] + (PingPongBallY * (SCORE + 0))
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
