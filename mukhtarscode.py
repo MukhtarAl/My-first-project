@@ -8,13 +8,15 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0, 173, 239)
 WIN.fill(BLUE)
-
+FONT = pygame.font.Font('COMIC.TTF', 10)
 #pygame.set_caption("Ping Pong")
 
 pygame.display.update()
 
-def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition):
+def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, SCORE):
+    SCORE = FONT.render(SCORE, True, (255,255,255))
     WIN.fill(BLUE)
+    WIN.blit(SCORE, (10, 10))
     WIN.blit(PingPongTable, (325,200))
     WIN.blit(Paddle,PaddlePosition)
     WIN.blit(PingPongBall, PingPongBallPosition)
@@ -69,7 +71,7 @@ def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection
     C = math.sqrt(X ** 2 + Y ** 2)
     Direction = math.asin(Y / C)
     Direction = math.degrees(Direction)
-    return int(Direction)
+    return PingPongBallDirection + 180
 
 
 def PingPongBallMovement(PingPongBallDirection):
@@ -145,13 +147,14 @@ def main():
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
         #print(PaddlePosition)
         if CollisionCheck(PingPongBallPosition, PaddlePosition, (30,30), (50,50)) and PingPongBallDirection > 180:
-            PingPongBallDirection = PingPongBallDirection + 180
+            PingPongBallDirection = PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection)
             SCORE = SCORE + 1
             print(SCORE)
             if PingPongBallDirection > 360:
                 PingPongBallDirection = PingPongBallDirection - 360
         if CollisionCheck(PingPongBallPosition, WallPosition, (30, 30), (50,250)):
             PingPongBallDirection = random.randint(240,320)
+        #PaddlePosition = (PaddlePosition[0], PingPongBallPosition[1])
 
         PingPongBallX, PingPongBallY = PingPongBallMovement(PingPongBallDirection)
         PingPongBallPosition = PingPongBallPosition[0] + (PingPongBallX * (SCORE + 5)), PingPongBallPosition[1] + (PingPongBallY * (SCORE + 0))
