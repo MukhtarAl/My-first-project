@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+pygame.font.init()
 WIN = pygame.display.set_mode((1100,650))
 WHITE = (255,255,255)
 BLACK = (0,0,0)
@@ -8,7 +9,7 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0, 173, 239)
 WIN.fill(BLUE)
-FONT = pygame.font.Font('COMIC.TTF', 10)
+FONT = pygame.font.Font('ComicSansMS3.ttf', 10)
 #pygame.set_caption("Ping Pong")
 
 pygame.display.update()
@@ -67,11 +68,11 @@ def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection
     X = PingPongBallPosition
     Y = WallPosition
     X = abs(WallPosition[0] - PingPongBallPosition[0])
-    Y = abs(WallPosition[1] - PingPongBallPosition[1])
+    Y = abs(WallPosition[1] + 125 - PingPongBallPosition[1])
     C = math.sqrt(X ** 2 + Y ** 2)
     Direction = math.asin(Y / C)
     Direction = math.degrees(Direction)
-    return PingPongBallDirection + 180
+    return Direction
 
 
 def PingPongBallMovement(PingPongBallDirection):
@@ -91,11 +92,7 @@ def PingPongBallMovement(PingPongBallDirection):
 
     return XCHANGE, YCHANGE
 
-def CollisionCheck(Position1, Position2, Size1, Size2):
-    if Position2[0] + Size2[0] >= Position1[0] and Position2[0] <= Position1[0] + Size1[0]:
-        if Position2[1] <= Position1[1] + 30 and Position1[1] <= Position2[1] + Size2[1]:
-            return True
-    return False
+
 
 def main():
     PingPongTable = pygame.image.load("PingPongTable.jpg")
@@ -144,15 +141,25 @@ def main():
         #bottom barrier
         if PaddlePosition[1] > 600:
             PaddlePosition = (PaddlePosition[0], 600)
-        UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition)
+
+
+        PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
+
+
+        UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition, str(SCORE))
         #print(PaddlePosition)
-        if CollisionCheck(PingPongBallPosition, PaddlePosition, (30,30), (50,50)) and PingPongBallDirection > 180:
+
+        PaddleRectangle = Paddle.get_rect(topleft = PaddlePosition)
+        BallRectamgle = PingPongBall.get_rect(topleft = PingPongBallPosition)
+        WallRectangle = Wall.get_rect(topleft = WallPosition)
+
+        if PaddleRectangle.colliderect(BallRectamgle):
             PingPongBallDirection = PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection)
             SCORE = SCORE + 1
             print(SCORE)
             if PingPongBallDirection > 360:
                 PingPongBallDirection = PingPongBallDirection - 360
-        if CollisionCheck(PingPongBallPosition, WallPosition, (30, 30), (50,250)):
+        if BallRectamgle.colliderect(WallRectangle):
             PingPongBallDirection = random.randint(240,320)
         #PaddlePosition = (PaddlePosition[0], PingPongBallPosition[1])
 
