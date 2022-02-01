@@ -67,11 +67,22 @@ def KEYCHECK(KEYS):
 def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection):
     X = PingPongBallPosition
     Y = WallPosition
-    X = abs(WallPosition[0] - PingPongBallPosition[0])
-    Y = abs(WallPosition[1] + 125 - PingPongBallPosition[1])
-    C = math.sqrt(X ** 2 + Y ** 2)
-    Direction = math.asin(Y / C)
-    Direction = math.degrees(Direction)
+    X = (WallPosition[0] - PingPongBallPosition[0])
+    Y = (WallPosition[1] - PingPongBallPosition[1])
+    if Y == 0:
+        if X < 0:
+            Direction = 180
+        else:
+            Direction = 90
+    else:
+        if Y < 0:
+            Direction = 180 + math.atan(Y / X)
+        else:
+            Direction = math.atan(Y / X)
+
+    while Direction > 360:
+        Direction = Direction - 360
+
     return Direction
 
 
