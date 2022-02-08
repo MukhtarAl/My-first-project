@@ -9,7 +9,7 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0, 173, 239)
 WIN.fill(BLUE)
-FONT = pygame.font.Font('ComicSansMS3.ttf', 10)
+FONT = pygame.font.Font('ComicSansMS3.ttf', 50)
 #pygame.set_caption("Ping Pong")
 
 pygame.display.update()
@@ -61,26 +61,14 @@ def KEYCHECK(KEYS):
         else:
             return (-0.2, 0)
 
+
     else:
         return(0,0)
 
-def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection):
-    X = PingPongBallPosition
-    Y = WallPosition
-    X = (WallPosition[0] - PingPongBallPosition[0])
-    Y = (WallPosition[1] - PingPongBallPosition[1])
-    if Y == 0:
-        if X < 0:
-            Direction = 180
-        else:
-            Direction = 90
-    else:
-        if Y < 0:
-            Direction = 180 + math.atan(Y / X)
-        else:
-            Direction = math.atan(Y / X)
 
-    while Direction > 360:
+def PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection):
+    Direction = PingPongBallDirection + 180
+    if Direction > 360:
         Direction = Direction - 360
 
     return Direction
@@ -100,6 +88,7 @@ def PingPongBallMovement(PingPongBallDirection):
     if PingPongBallDirection >= 0 and PingPongBallDirection <= 90:
         XCHANGE = PingPongBallDirection / 90
         YCHANGE = (1 - XCHANGE) * -1
+
 
     return XCHANGE, YCHANGE
 
@@ -147,6 +136,7 @@ def main():
         #right barrier
         if PaddlePosition[0] > 303:
            PaddlePosition = (303, PaddlePosition[1])
+        #top barrier
         if PaddlePosition[1] < -1.0:
             PaddlePosition = (PaddlePosition[0], -1)
         #bottom barrier
@@ -165,11 +155,14 @@ def main():
         WallRectangle = Wall.get_rect(topleft = WallPosition)
 
         if PaddleRectangle.colliderect(BallRectamgle):
+            print(PingPongBallDirection)
             PingPongBallDirection = PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection)
             SCORE = SCORE + 1
-            print(SCORE)
+            print(PingPongBallDirection)
             if PingPongBallDirection > 360:
                 PingPongBallDirection = PingPongBallDirection - 360
+            elif PingPongBallDirection < 0:
+                PingPongBallDirection = PingPongBallDirection + 360
         if BallRectamgle.colliderect(WallRectangle):
             PingPongBallDirection = random.randint(240,320)
         #PaddlePosition = (PaddlePosition[0], PingPongBallPosition[1])
@@ -180,8 +173,14 @@ def main():
             if events.type == pygame.QUIT:
                 running = False
 
-
         pygame.display.update()
+
+        if KEYS[pygame.K_r]:
+            WallPosition = (775, 200)
+            PingPongBallPosition = (767, 310)
+            PingPongBallDirection = 270
+            PaddlePosition = (150, 310)
+            SCORE = 0
 
 
     pygame.quit()
