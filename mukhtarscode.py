@@ -83,11 +83,12 @@ def PingPongBallMovement(PingPongBallDirection):
         XCHANGE = (PingPongBallDirection - 180) / 90 * -1
         YCHANGE = 1 + XCHANGE
     if PingPongBallDirection >= 270 and PingPongBallDirection <= 360:
-        YCHANGE = (PingPongBallDirection - 360) / 90
-        XCHANGE = (1 + YCHANGE)
+        YCHANGE = (PingPongBallDirection - 270) / 90 * -1
+        XCHANGE = (1 + YCHANGE) * -1
     if PingPongBallDirection >= 0 and PingPongBallDirection <= 90:
         XCHANGE = PingPongBallDirection / 90
         YCHANGE = (1 - XCHANGE) * -1
+
 
 
     return XCHANGE, YCHANGE
@@ -168,7 +169,7 @@ def main():
         #PaddlePosition = (PaddlePosition[0], PingPongBallPosition[1])
 
         PingPongBallX, PingPongBallY = PingPongBallMovement(PingPongBallDirection)
-        PingPongBallPosition = PingPongBallPosition[0] + (PingPongBallX * (SCORE + 5)), PingPongBallPosition[1] + (PingPongBallY * (SCORE + 0))
+        PingPongBallPosition = PingPongBallPosition[0] + (PingPongBallX * (SCORE + 2)), PingPongBallPosition[1] + (PingPongBallY * (SCORE + 0))
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
