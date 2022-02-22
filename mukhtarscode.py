@@ -10,9 +10,38 @@ GREEN = (0,255,0)
 BLUE = (0, 173, 239)
 WIN.fill(BLUE)
 FONT = pygame.font.Font('ComicSansMS3.ttf', 50)
+FONT1 = pygame.font.Font('ComicSansMS3.ttf', 25)
+FONT2 = pygame.font.Font('slkscreb.ttf', 75)
 #pygame.set_caption("Ping Pong")
 
 pygame.display.update()
+
+def start():
+
+    WIN.fill(BLACK)
+    WIN.blit(FONT2.render('PING PONG', True, (255,255,255)),(260,200))
+    WIN.blit(FONT1.render('click anywhere to begin', True, (255, 255, 255)), (410, 400))
+
+    #Paddle
+    PaddlePosition = (875, 310)
+    Paddle = pygame.image.load("Paddle.png")
+    Paddle = pygame.transform.scale(Paddle, (150, 150))
+    WIN.blit(Paddle, PaddlePosition)
+
+    #Ping pong ball
+    PingPongBall = pygame.image.load("PingPongBall.png")
+    PingPongBall = pygame.transform.scale(PingPongBall, (120, 120))
+    WIN.blit(PingPongBall, (100, 325))
+
+    pygame.display.update()
+    running = True
+    while running == True:
+        for events in pygame.event.get():
+            if events.type == pygame.MOUSEBUTTONDOWN:
+                running = False
+                main()
+            if events.type == pygame.QUIT:
+                running = False
 
 def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, SCORE):
     SCORE = FONT.render(SCORE, True, (255,255,255))
@@ -22,6 +51,8 @@ def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosi
     WIN.blit(Paddle,PaddlePosition)
     WIN.blit(PingPongBall, PingPongBallPosition)
     WIN.blit(Wall, WallPosition)
+    WIN.blit(FONT1.render('click "R" to restart', True, (255, 255, 255)), (650, 10))
+
 
 
 
@@ -187,4 +218,4 @@ def main():
     pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    start()
