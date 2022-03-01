@@ -9,12 +9,16 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0, 173, 239)
 WIN.fill(BLUE)
-FONT = pygame.font.Font('ComicSansMS3.ttf', 50)
+FONT = pygame.font.Font('ComicSansMS3.ttf', 25)
 FONT1 = pygame.font.Font('ComicSansMS3.ttf', 25)
 FONT2 = pygame.font.Font('slkscreb.ttf', 75)
 #pygame.set_caption("Ping Pong")
 
 pygame.display.update()
+
+file = open('HighScore.txt', 'r+')
+Highscore = int(file.read())
+
 
 def start():
 
@@ -44,14 +48,17 @@ def start():
                 running = False
 
 def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, SCORE):
-    SCORE = FONT.render(SCORE, True, (255,255,255))
+    SCORE = FONT.render('Score: ' + SCORE, True, (255,255,255))
+    HIGHSCORE = FONT.render('HI: ' + str(Highscore), True, (255, 255, 255))
     WIN.fill(BLUE)
-    WIN.blit(SCORE, (10, 10))
+
+    WIN.blit(SCORE, (30, 10))
     WIN.blit(PingPongTable, (325,200))
     WIN.blit(Paddle,PaddlePosition)
     WIN.blit(PingPongBall, PingPongBallPosition)
     WIN.blit(Wall, WallPosition)
     WIN.blit(FONT1.render('click "R" to restart', True, (255, 255, 255)), (650, 10))
+    WIN.blit(HIGHSCORE, (200, 10))
 
 
 
@@ -176,7 +183,7 @@ def main():
             PaddlePosition = (PaddlePosition[0], 600)
 
 
-        PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
+        #PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
 
 
         UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition, str(SCORE))
@@ -186,7 +193,7 @@ def main():
         BallRectamgle = PingPongBall.get_rect(topleft = PingPongBallPosition)
         WallRectangle = Wall.get_rect(topleft = WallPosition)
 
-        if PaddleRectangle.colliderect(BallRectamgle):
+        if PaddleRectangle.colliderect(BallRectamgle) and PingPongBallDirection >= 180:
             print(PingPongBallDirection)
             PingPongBallDirection = PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection)
             SCORE = SCORE + 1
@@ -199,8 +206,16 @@ def main():
             PingPongBallDirection = random.randint(240,320)
         #PaddlePosition = (PaddlePosition[0], PingPongBallPosition[1])
 
+
+        #BALL SPEED
+
         PingPongBallX, PingPongBallY = PingPongBallMovement(PingPongBallDirection)
-        PingPongBallPosition = PingPongBallPosition[0] + (PingPongBallX * (SCORE + 2)), PingPongBallPosition[1] + (PingPongBallY * (SCORE + 0))
+        if SCORE >= 9:
+            PingPongBallPosition = PingPongBallPosition[0] + (PingPongBallX * (9 + 0)), PingPongBallPosition[1] + (PingPongBallY * (9 + 0))
+        else:
+            PingPongBallPosition = PingPongBallPosition[0] + (PingPongBallX * (SCORE + 0.5)), PingPongBallPosition[1] + (PingPongBallY * (SCORE + 0))
+
+
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
@@ -213,6 +228,10 @@ def main():
             PingPongBallDirection = 270
             PaddlePosition = (150, 310)
             SCORE = 0
+        if PingPongBallPosition[1] < 0 or PingPongBallPosition[1] > 650:
+            running = False
+        if PingPongBallPosition[0] < 0 or PingPongBallPosition[0] > 1100:
+            running = False
 
 
     pygame.quit()
