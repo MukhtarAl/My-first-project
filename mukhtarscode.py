@@ -155,6 +155,10 @@ def main():
     Wall = pygame.transform.scale(Wall, (50,250))
     WallPosition = (775, 200)
     WIN.blit(Wall, WallPosition)
+
+    LOSS = pygame.image.load("imagineloosing.png")
+    LOSS = pygame.transform.scale(LOSS, (1100, 650))
+
     running = True
 
     SCORE = 0
@@ -228,10 +232,9 @@ def main():
             PingPongBallDirection = 270
             PaddlePosition = (150, 310)
             SCORE = 0
-        if PingPongBallPosition[1] < 0 or PingPongBallPosition[1] > 650:
-            running = False
-        if PingPongBallPosition[0] < 0 or PingPongBallPosition[0] > 1100:
-            running = False
+        if PingPongBallPosition[1] < 0 or PingPongBallPosition[1] > 650 or PingPongBallPosition[0] < 0 or PingPongBallPosition[0] > 1100:
+            WIN.blit(LOSS, (1100, 650))
+
 
 
     pygame.quit()
