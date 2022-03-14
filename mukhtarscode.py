@@ -54,11 +54,11 @@ def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosi
 
     WIN.blit(SCORE, (30, 10))
     WIN.blit(PingPongTable, (325,200))
-    WIN.blit(Paddle,PaddlePosition)
+    WIN.blit(HIGHSCORE, (200, 10))
     WIN.blit(PingPongBall, PingPongBallPosition)
     WIN.blit(Wall, WallPosition)
     WIN.blit(FONT1.render('click "R" to restart', True, (255, 255, 255)), (650, 10))
-    WIN.blit(HIGHSCORE, (200, 10))
+    WIN.blit(Paddle, PaddlePosition)
 
 
 
@@ -142,7 +142,8 @@ def main():
     PingPongBall = pygame.image.load("PingPongBall.png")
     PingPongBall = pygame.transform.scale(PingPongBall, (30,30))
     WIN.blit(PingPongBall, (560,310))
-    PingPongBallPosition = (767, 310)
+    PingPongBallPosition = (700, 310)
+    TempRandom = random.randint(1, 2)
     TempRandom = random.randint(1, 2)
     PingPongBallDirection = 270
 
@@ -156,7 +157,7 @@ def main():
     WallPosition = (775, 200)
     WIN.blit(Wall, WallPosition)
 
-    LOSS = pygame.image.load("imagineloosing.png")
+    LOSS = pygame.image.load("pixil-frame-0.png")
     LOSS = pygame.transform.scale(LOSS, (1100, 650))
 
     running = True
@@ -164,12 +165,19 @@ def main():
     SCORE = 0
 
     while running:
+        print(PingPongBallDirection)
         KEYS = pygame.key.get_pressed()
         XCHANGE = 0
         YCHANGE = 0
         XCHANGE,YCHANGE = KEYCHECK(KEYS)
-        XCHANGE = XCHANGE * 15
-        YCHANGE = YCHANGE * 15
+
+        if KEYS[pygame.K_LSHIFT]:
+            XCHANGE = XCHANGE * 30
+            YCHANGE = YCHANGE * 30
+        else:
+            XCHANGE = XCHANGE * 15
+            YCHANGE = YCHANGE * 15
+
         PaddlePosition = (PaddlePosition[0]+ XCHANGE,PaddlePosition[1]+ YCHANGE)
 
 
@@ -190,7 +198,7 @@ def main():
         #PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
 
 
-        UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition, str(SCORE))
+        #UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition, str(SCORE))
         #print(PaddlePosition)
 
         PaddleRectangle = Paddle.get_rect(topleft = PaddlePosition)
@@ -198,10 +206,10 @@ def main():
         WallRectangle = Wall.get_rect(topleft = WallPosition)
 
         if PaddleRectangle.colliderect(BallRectamgle) and PingPongBallDirection >= 180:
-            print(PingPongBallDirection)
+            #print(PingPongBallDirection)
             PingPongBallDirection = PingPongBallToWall(PingPongBallPosition, WallPosition, PingPongBallDirection)
             SCORE = SCORE + 1
-            print(PingPongBallDirection)
+            #print(PingPongBallDirection)
             if PingPongBallDirection > 360:
                 PingPongBallDirection = PingPongBallDirection - 360
             elif PingPongBallDirection < 0:
@@ -223,18 +231,21 @@ def main():
         for events in pygame.event.get():
             if events.type == pygame.QUIT:
                 running = False
-
         pygame.display.update()
 
         if KEYS[pygame.K_r]:
             WallPosition = (775, 200)
-            PingPongBallPosition = (767, 310)
+            PingPongBallPosition = (700, 310)
             PingPongBallDirection = 270
             PaddlePosition = (150, 310)
             SCORE = 0
-        if PingPongBallPosition[1] < 0 or PingPongBallPosition[1] > 650 or PingPongBallPosition[0] < 0 or PingPongBallPosition[0] > 1100:
-            WIN.blit(LOSS, (1100, 650))
 
+
+        if PingPongBallPosition[1] < 0 or PingPongBallPosition[1] > 650 or PingPongBallPosition[0] < 0 or PingPongBallPosition[0] > 1100:
+            WIN.blit(LOSS, (0, 0))
+            pygame.display.update()
+        else:
+            UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, str(SCORE))
 
 
     pygame.quit()
