@@ -1,3 +1,5 @@
+import fileinput
+
 import pygame
 import random
 import math
@@ -16,8 +18,9 @@ FONT2 = pygame.font.Font('slkscreb.ttf', 75)
 
 pygame.display.update()
 
-file = open('HighScore.txt', 'r+')
+file = open('HighScore.txt', 'r')
 Highscore = int(file.read())
+file.close()
 
 
 def start():
@@ -47,9 +50,9 @@ def start():
             if events.type == pygame.QUIT:
                 running = False
 
-def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, SCORE):
+def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, SCORE, PermanentHighscore):
     SCORE = FONT.render('Score: ' + SCORE, True, (255,255,255))
-    HIGHSCORE = FONT.render('HI: ' + str(Highscore), True, (255, 255, 255))
+    HIGHSCORE = FONT.render('HI: ' + str(PermanentHighscore), True, (255, 255, 255))
     WIN.fill(BLUE)
 
     WIN.blit(SCORE, (30, 10))
@@ -164,6 +167,9 @@ def main():
 
     SCORE = 0
 
+    PermanentHighscore = Highscore
+
+
     while running:
         print(PingPongBallDirection)
         KEYS = pygame.key.get_pressed()
@@ -195,7 +201,7 @@ def main():
             PaddlePosition = (PaddlePosition[0], 600)
 
 
-        #PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
+        PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
 
 
         #UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition, str(SCORE))
@@ -238,16 +244,24 @@ def main():
             PingPongBallPosition = (700, 310)
             PingPongBallDirection = 270
             PaddlePosition = (150, 310)
+            if SCORE > PermanentHighscore:
+                PermanentHighscore = SCORE
             SCORE = 0
 
 
         if PingPongBallPosition[1] < 0 or PingPongBallPosition[1] > 650 or PingPongBallPosition[0] < 0 or PingPongBallPosition[0] > 1100:
             WIN.blit(LOSS, (0, 0))
             pygame.display.update()
+            PaddlePosition = (150, 310)
+
         else:
-            UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, str(SCORE))
+            UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosition, Wall, WallPosition, str(SCORE), PermanentHighscore)
 
-
+    if SCORE > PermanentHighscore:
+        PermanentHighscore = SCORE
+    file = open('Highscore.txt', 'w')
+    file.write(str(PermanentHighscore))
+    file.close()
     pygame.quit()
 
 if __name__ == "__main__":
