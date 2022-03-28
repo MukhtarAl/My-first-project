@@ -60,7 +60,7 @@ def UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition, PingPongBallPosi
     WIN.blit(HIGHSCORE, (200, 10))
     WIN.blit(PingPongBall, PingPongBallPosition)
     WIN.blit(Wall, WallPosition)
-    WIN.blit(FONT1.render('click "R" to restart', True, (255, 255, 255)), (650, 10))
+    WIN.blit(FONT1.render('press "R" to restart', True, (255, 255, 255)), (800, 10))
     WIN.blit(Paddle, PaddlePosition)
 
 
@@ -151,8 +151,8 @@ def main():
     PingPongBallDirection = 270
 
     PaddlePosition = (150,310)
-    Paddle = pygame.image.load("Paddle.png")
-    Paddle = pygame.transform.scale(Paddle, (50,50))
+    Paddle = pygame.image.load("kungfupanda.png")
+    Paddle = pygame.transform.scale(Paddle, (60,60))
     WIN.blit(Paddle, PaddlePosition)
 
     Wall = pygame.image.load("Wall.png")
@@ -160,7 +160,7 @@ def main():
     WallPosition = (775, 200)
     WIN.blit(Wall, WallPosition)
 
-    LOSS = pygame.image.load("pixil-frame-0.png")
+    LOSS = pygame.image.load("kungfuloss.png")
     LOSS = pygame.transform.scale(LOSS, (1100, 650))
 
     running = True
@@ -169,9 +169,17 @@ def main():
 
     PermanentHighscore = Highscore
 
+    fps = pygame.time.Clock()
+    time = 0
 
     while running:
-        print(PingPongBallDirection)
+        #time
+        fps.tick(90)
+        time = pygame.time.get_ticks() // 1000
+        time = FONT.render('Seconds: ' + str(time), True, (255, 255, 255))
+        WIN.blit(time, (500, 10))
+        print (time)
+        #print(PingPongBallDirection)
         KEYS = pygame.key.get_pressed()
         XCHANGE = 0
         YCHANGE = 0
@@ -201,7 +209,7 @@ def main():
             PaddlePosition = (PaddlePosition[0], 600)
 
 
-        PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
+        #PaddlePosition = PaddlePosition[0], PingPongBallPosition[1] #AIMBOT
 
 
         #UPDATE(PingPongTable, PingPongBall, Paddle, PaddlePosition,PingPongBallPosition, Wall, WallPosition, str(SCORE))
@@ -221,7 +229,7 @@ def main():
             elif PingPongBallDirection < 0:
                 PingPongBallDirection = PingPongBallDirection + 360
         if BallRectamgle.colliderect(WallRectangle):
-            PingPongBallDirection = random.randint(240,320)
+            PingPongBallDirection = random.randint(240,312)
         #PaddlePosition = (PaddlePosition[0], PingPongBallPosition[1])
 
 
